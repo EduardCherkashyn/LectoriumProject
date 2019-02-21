@@ -44,3 +44,4 @@ Once you're done, simply `cd` to your project and run `docker-compose up -d`. Th
 
 
 Disclaimer: This project has been generated on phpdocker.io
+# LectoriumProject

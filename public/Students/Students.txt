@@ -1,0 +1,5 @@
+edik@ukr.net:Eduard:Eduard:Php
+edik1@ukr.net:Eduard:Eduard:Java
+edik2@ukr.net:Eduard:Eduard:QA
+edik3@ukr.net:Eduard:Eduard:Php
+edik4@ukr.net:Eduard:Eduard:JavaScript

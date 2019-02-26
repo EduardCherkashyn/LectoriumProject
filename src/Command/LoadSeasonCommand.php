@@ -48,6 +48,11 @@ class LoadSeasonCommand extends Command
         $io->section('Creating the new  season!');
         $confirm = $io->confirm('Are you sure?');
         if($confirm) {
+            $command = $this->getApplication()->find('app:admin-create');
+            $arguments = [];
+            $greetInput = new ArrayInput($arguments);
+            $command->run($greetInput, $output);
+
             $command = $this->getApplication()->find('app:courses-create');
             $arguments = [];
             $greetInput = new ArrayInput($arguments);
@@ -68,3 +73,4 @@ class LoadSeasonCommand extends Command
 
     }
 }
+

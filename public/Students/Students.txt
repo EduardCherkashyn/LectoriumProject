@@ -1,5 +1,5 @@
-edik@ukr.net:Eduard:Eduard:Php
-edik1@ukr.net:Eduard:Eduard:Java
-edik2@ukr.net:Eduard:Eduard:QA
-edik3@ukr.net:Eduard:Eduard:Php
-edik4@ukr.net:Eduard:Eduard:JavaScript
+student@ukr.net:Eduard:Eduard:Php
+student1@ukr.net:Eduard:Eduard:Java
+student2@ukr.net:Eduard:Eduard:QA
+student3@ukr.net:Eduard:Eduard:Php
+student4@ukr.net:Eduard:Eduard:JavaScript

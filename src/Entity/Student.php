@@ -11,7 +11,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Model\UserBaseClass;
 use Doctrine\ORM\Mapping\Entity;
 
 /** @Entity */
@@ -26,7 +25,7 @@ class Student extends UserBaseClass
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Course", inversedBy="students")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $course;
 

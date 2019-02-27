@@ -1,6 +1,6 @@
 security:
     encoders:
-        App\Model\UserBaseClass:
+        App\Entity\UserBaseClass:
             algorithm: bcrypt
 
 
@@ -8,22 +8,14 @@ security:
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         master_provider:
-            chain:
-                providers: [admin, mentor, student]
-
-        admin:
-            entity: { class: App\Entity\Admin, property: email }
-        mentor:
-            entity: { class: App\Entity\Mentor, property: email}
-        student:
-            entity: { class: App\Entity\Student, property: email}
-
+            entity:
+                class: App\Entity\UserBaseClass
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            provider: master_provider
             anonymous: ~
             logout: ~
 

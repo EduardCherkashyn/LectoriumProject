@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ramsey/uuid-doctrine": "^1.5",
         "sensio/framework-extra-bundle": "^5.2",
+        "symfony/browser-kit": "4.2.*",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
@@ -18,7 +19,8 @@
         "symfony/security-bundle": "4.2.*",
         "symfony/twig-bundle": "4.2.*",
         "symfony/validator": "4.2.*",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+        "ext-json": "*"
     },
     "config": {
         "preferred-install": {
@@ -66,6 +68,7 @@
         }
     },
     "require-dev": {
+        "symfony/phpunit-bridge": "4.2.*",
         "symfony/profiler-pack": "^1.0"
     }
 }

@@ -8,9 +8,7 @@
 
 namespace App\Security;
 
-use App\Entity\Admin;
-use App\Entity\Mentor;
-use App\Entity\Student;
+use App\Entity\UserBaseClass;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,21 +57,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             return;
         }
 
-        if( $this->em->getRepository(Mentor::class)
-            ->findOneBy(['apiToken' => $apiToken])!==null){
-            return $this->em->getRepository(Mentor::class)
+        return $this->em->getRepository(UserBaseClass::class)
                 ->findOneBy(['apiToken' => $apiToken]);
-        }
-        if( $this->em->getRepository(Admin::class)
-                ->findOneBy(['apiToken' => $apiToken])!==null){
-            return $this->em->getRepository(Admin::class)
-                ->findOneBy(['apiToken' => $apiToken]);
-        }
-        if($user = $this->em->getRepository(Student::class)
-                ->findOneBy(['apiToken' => $apiToken])!==null){
-            return $user = $this->em->getRepository(Student::class)
-                ->findOneBy(['apiToken' => $apiToken]);
-        }
 
     }
 

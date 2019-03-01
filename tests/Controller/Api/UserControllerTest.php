@@ -8,11 +8,17 @@
 
 namespace App\Tests\Controller\Api;
 
-use App\Entity\UserBaseClass;
 use App\Tests\AbstractTest;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Client;
 
 class UserControllerTest extends AbstractTest
 {
+    /** @var Client $client */
+    protected $client;
+    /** @var EntityManagerInterface */
+    protected $entityManager;
+
     /**
      * @test
      * @dataProvider userData
@@ -37,7 +43,7 @@ class UserControllerTest extends AbstractTest
     public function userData()
     {
         return [
-            'Valid data' => ['123456', 'admin@admin.com', 200],
+            'Valid data' => ['Eduard', 'student@ukr.net', 200],
             'Invalid Data' => ['1111', 'ed@ukr.net', 404],
             'Empty Data' => ['', '', 404]
         ];
@@ -68,13 +74,11 @@ class UserControllerTest extends AbstractTest
 
     public function passwordData()
     {
-        $student = $this->entityManager->getRepository(UserBaseClass::class)->findOneBy(['email' => 'student@ukr.net']);
-
         return [
-            'Valid data' => ['Eduard', '111111',$student->getApiToken(), 200],
-            'Invalid data' => ['Eduard', '11',$student->getApiToken(), 400],
+            'Valid data' => ['Eduard', 'Eduard',$this->token_student, 200],
+            'Invalid data' => ['Eduard', '11',$this->token_student, 400],
             'UnAuthorized' => ['111', '111111','', 403],
-            'Invalid Old password' => ['12', '111111',$student->getApiToken(), 400],
+            'Invalid Old password' => ['12', '111111',$this->token_student, 400]
         ];
     }
 }

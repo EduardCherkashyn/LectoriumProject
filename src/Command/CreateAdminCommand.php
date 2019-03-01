@@ -20,10 +20,10 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CreateAdminCommand extends Command
 {
-// the name of the command (the part after "bin/console")
+    // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:admin-create';
 
-    protected  $manager;
+    protected $manager;
 
     protected $encoder;
 
@@ -53,7 +53,7 @@ class CreateAdminCommand extends Command
         $io->section('Creating admin user!');
 
         $confirm = $io->confirm('Are you sure?');
-        if($confirm) {
+        if ($confirm) {
             $question = new Question('Please enter your email:');
             $email = $io->askQuestion($question);
             $question1 = new Question('Please enter your full Name:');
@@ -71,6 +71,5 @@ class CreateAdminCommand extends Command
             $this->manager->flush();
             $io->success("Success!");
         }
-
     }
 }

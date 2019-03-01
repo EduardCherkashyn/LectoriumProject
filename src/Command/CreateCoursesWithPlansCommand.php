@@ -9,17 +9,18 @@
 namespace App\Command;
 
 use App\Entity\Course;
+use App\Entity\Plan;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CreateCoursesCommand extends Command
+class CreateCoursesWithPlansCommand extends Command
 {
     protected static $defaultName = 'app:courses-create';
 
-    protected  $manager;
+    protected $manager;
 
 
     public function __construct($name = null, EntityManagerInterface $manager)
@@ -48,16 +49,17 @@ class CreateCoursesCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->section('Creating courses for the season!');
         $confirm = $io->confirm('Are you sure?');
-        if($confirm) {
-            foreach ($data as $value){
+        if ($confirm) {
+            foreach ($data as $value) {
                 $course = new Course();
+                $plan = new Plan();
                 $course->setName($value);
-                $course->setYear(new \DateTime());
+                $course->setYear(new \DateTime())
+                       ->setPlan($plan);
                 $this->manager->persist($course);
             }
             $this->manager->flush();
             $io->success("Success!");
         }
-
     }
 }

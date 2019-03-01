@@ -8,7 +8,6 @@
 
 namespace App\Command;
 
-
 use App\Entity\Course;
 use App\Entity\Mentor;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +22,7 @@ class CreateMentorsCommand extends Command
 {
     protected static $defaultName = 'app:mentors-create';
 
-    protected  $manager;
+    protected $manager;
 
     protected $encoder;
 
@@ -52,7 +51,7 @@ class CreateMentorsCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->section('Creating mentors for the season!');
         $confirm = $io->confirm('Are you sure?');
-        if($confirm) {
+        if ($confirm) {
             $file = file_get_contents(getcwd().'/public/Mentors/Mentors.txt');
             $data = explode("\n", $file);
             $mentors = [];
@@ -61,7 +60,7 @@ class CreateMentorsCommand extends Command
                 $mentors[] = $mentor;
             }
             $courses = $this->manager->getRepository(Course::class)->findAll();
-            foreach ($courses as $course){
+            foreach ($courses as $course) {
                 $name = $course->getName();
                 foreach ($mentors as $value) {
                     if ($name == $value[3]) {
@@ -82,6 +81,5 @@ class CreateMentorsCommand extends Command
             $this->manager->flush();
             $io->success("Success!");
         }
-
     }
 }

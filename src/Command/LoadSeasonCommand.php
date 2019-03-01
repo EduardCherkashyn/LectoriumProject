@@ -8,7 +8,6 @@
 
 namespace App\Command;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -20,7 +19,7 @@ class LoadSeasonCommand extends Command
 {
     protected static $defaultName = 'app:season-create';
 
-    protected  $manager;
+    protected $manager;
 
 
     public function __construct($name = null, EntityManagerInterface $manager)
@@ -43,11 +42,10 @@ class LoadSeasonCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $io = new SymfonyStyle($input, $output);
         $io->section('Creating the new  season!');
         $confirm = $io->confirm('Are you sure?');
-        if($confirm) {
+        if ($confirm) {
             $command = $this->getApplication()->find('app:admin-create');
             $arguments = [];
             $greetInput = new ArrayInput($arguments);
@@ -70,7 +68,5 @@ class LoadSeasonCommand extends Command
 
             $io->success("Season is created successfully!!!");
         }
-
     }
 }
-

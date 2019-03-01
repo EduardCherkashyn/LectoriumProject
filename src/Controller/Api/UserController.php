@@ -8,7 +8,6 @@
 
 namespace App\Controller\Api;
 
-
 use App\Entity\UserBaseClass;
 use App\Exception\JsonHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +22,6 @@ class UserController extends AbstractController
      * @Route("/login"), methods={"POST"}
      */
     public function loginAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
-
     {
         if (!$content = $request->getContent()) {
             throw new JsonHttpException(400, 'Bad Request');
@@ -40,7 +38,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/user/password", methods={"PUT"})
      */
-    public function changePasswordAction(Request $request,ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder)
+    public function changePasswordAction(Request $request, ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder)
     {
         if (!$content = $request->getContent()) {
             throw new JsonHttpException(400, 'Bad Request');
@@ -48,10 +46,10 @@ class UserController extends AbstractController
         $data = json_decode($content, true);
         $user = $this->getUser();
         $checkPass = $passwordEncoder->isPasswordValid($user, $data['oldPassword']);
-        if(!$checkPass == true){
+        if (!$checkPass == true) {
             throw new JsonHttpException(400, 'Wrong current password!');
         }
-        if(strlen($data['newPassword']) < 3 || strlen($data['newPassword']) > 10) {
+        if (strlen($data['newPassword']) < 3 || strlen($data['newPassword']) > 10) {
             throw new JsonHttpException(400, 'Password length is not correct!It suppose to be not less than 3 and not more than 10 digits!');
         }
         $newPassword = $passwordEncoder->encodePassword($user, $data['newPassword']);
@@ -66,5 +64,4 @@ class UserController extends AbstractController
 
         return $this->json($user);
     }
-
 }

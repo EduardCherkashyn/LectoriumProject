@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping\InheritanceType;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * @Entity(repositoryClass="App\Repository\UserBaseClassRepository")
  * @InheritanceType("SINGLE_TABLE")
@@ -21,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 
 
-abstract class UserBaseClass implements UserInterface,\JsonSerializable
+abstract class UserBaseClass implements UserInterface, \JsonSerializable
 {
     /**
      * @ORM\Id()

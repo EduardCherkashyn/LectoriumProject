@@ -8,7 +8,6 @@
 
 namespace App\Command;
 
-
 use App\Entity\Course;
 use App\Entity\Student;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +22,7 @@ class CreateStudentsCammand extends Command
 {
     protected static $defaultName = 'app:students-create';
 
-    protected  $manager;
+    protected $manager;
 
     protected $encoder;
 
@@ -52,36 +51,35 @@ class CreateStudentsCammand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->section('Creating students for the season!');
         $confirm = $io->confirm('Are you sure?');
-        if($confirm) {
-        $file = file_get_contents(getcwd().'/public/Students/Students.txt');
-        $data = explode("\n", $file);
-        $students = [];
-        foreach ($data as $value) {
-            $student = explode(':', $value);
-            $students[] = $student;
-        }
-        $courses = $this->manager->getRepository(Course::class)->findAll();
-        foreach ($courses as $course){
-            $name = $course->getName();
-            foreach ($students as $value) {
-                if ($name == $value[3]) {
-                    $uuid = Uuid::uuid4();
-                    $student = new Student();
-                    $student->setEmail($value[0])
+        if ($confirm) {
+            $file = file_get_contents(getcwd().'/public/Students/Students.txt');
+            $data = explode("\n", $file);
+            $students = [];
+            foreach ($data as $value) {
+                $student = explode(':', $value);
+                $students[] = $student;
+            }
+            $courses = $this->manager->getRepository(Course::class)->findAll();
+            foreach ($courses as $course) {
+                $name = $course->getName();
+                foreach ($students as $value) {
+                    if ($name == $value[3]) {
+                        $uuid = Uuid::uuid4();
+                        $student = new Student();
+                        $student->setEmail($value[0])
                         ->setPassword($this->encoder->encodePassword($student, $value[1]))
                         ->setName($value[2])
                         ->setCourse($course)
                         ->setRoles(["ROLE_STUDENT"])
                         ->setApiToken($uuid->toString());
-                    $this->manager->persist($student);
-                    unset($value);
+                        $this->manager->persist($student);
+                        unset($value);
+                    }
                 }
             }
-        }
 
             $this->manager->flush();
             $io->success("Success!");
         }
-
     }
 }

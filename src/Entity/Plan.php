@@ -24,7 +24,7 @@ class Plan
     private $course;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Topic", mappedBy="plan")
+     * @ORM\OneToMany(targetEntity="App\Entity\Topic", mappedBy="plan", cascade={"persist"})
      */
     private $topics;
 

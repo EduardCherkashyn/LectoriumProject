@@ -59,7 +59,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
         return $this->em->getRepository(UserBaseClass::class)
                 ->findOneBy(['apiToken' => $apiToken]);
-
     }
 
     public function checkCredentials($credentials, UserInterface $user)

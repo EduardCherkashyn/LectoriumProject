@@ -26,6 +26,4 @@ class Admin extends UserBaseClass
     {
         return $this->id;
     }
-
-
 }

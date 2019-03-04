@@ -3,18 +3,19 @@
  * Created by PhpStorm.
  * User: eduardcherkashyn
  * Date: 2019-03-04
- * Time: 13:41
+ * Time: 17:43
  */
 
-namespace App\Tests\Command;
+namespace App\Tests\src\Command;
 
-use App\Entity\UserBaseClass;
+use App\Entity\Course;
+use App\Entity\Plan;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CreateAdminCommandTest extends KernelTestCase
+class CreateCoursesWithPlansCommandTest extends KernelTestCase
 {
     /** @var EntityManagerInterface */
     protected $entityManager;
@@ -30,20 +31,20 @@ class CreateAdminCommandTest extends KernelTestCase
         $kernel = static::createKernel();
         $application = new Application($kernel);
 
-        $command = $application->find('app:admin-create');
+        $command = $application->find('app:courses-create');
         $commandTester = new CommandTester($command);
-        $commandTester->setInputs(['yes','admintest@admin.com', 'admin', '123456']);
+        $commandTester->setInputs(['yes']);
         $commandTester->execute([
-            'command'  => $command->getName(),
+            'command' => $command->getName(),
         ]);
 
         // the output of the command in the console
         $output = $commandTester->getDisplay();
         $this->assertContains('Success!', $output);
-        $admin = $this->entityManager->getRepository(UserBaseClass::class)->findOneBy(['email' => 'admintest@admin.com']);
-        $this->assertNotEmpty($admin,'No records found!');
-        $this->assertContains("ROLE_ADMIN",$admin->getRoles());
-        $this->entityManager->remove($admin);
-        $this->entityManager->flush();
+        $courses = $this->entityManager->getRepository(Course::class)->findAll();
+        $plans = $this->entityManager->getRepository(Plan::class)->findAll();
+        $this->assertNotEmpty($courses);
+        $this->assertNotEmpty($plans);
+        $this->assertEquals(count($courses),count($plans));
     }
 }

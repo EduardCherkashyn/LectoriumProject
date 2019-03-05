@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190305155309 extends AbstractMigration
+final class Version20190305170420 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,7 @@ final class Version20190305155309 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE homework (id INT AUTO_INCREMENT NOT NULL, student_id INT NOT NULL, home_task_id INT NOT NULL, git_hub_repository VARCHAR(255) NOT NULL, status INT NOT NULL, INDEX IDX_8C600B4ECB944F1A (student_id), INDEX IDX_8C600B4E3896CADE (home_task_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE homework (id INT AUTO_INCREMENT NOT NULL, student_id INT NOT NULL, home_task_id INT NOT NULL, git_hub_repository VARCHAR(255) DEFAULT NULL, status INT NOT NULL, INDEX IDX_8C600B4ECB944F1A (student_id), INDEX IDX_8C600B4E3896CADE (home_task_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_base_class (id INT AUTO_INCREMENT NOT NULL, course_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, api_token VARCHAR(255) NOT NULL, avatar VARCHAR(255) DEFAULT NULL, discr VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_F7074EA1E7927C74 (email), UNIQUE INDEX UNIQ_F7074EA17BA2F5EB (api_token), INDEX IDX_F7074EA1591CC992 (course_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE home_task (id INT AUTO_INCREMENT NOT NULL, topic_id INT NOT NULL, date DATETIME NOT NULL, description LONGTEXT NOT NULL, INDEX IDX_73586AEA1F55203D (topic_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE course (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, year DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');

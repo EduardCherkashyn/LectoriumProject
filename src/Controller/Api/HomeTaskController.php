@@ -11,6 +11,7 @@ namespace App\Controller\Api;
 use App\Entity\HomeTask;
 use App\Entity\Topic;
 use App\Exception\JsonHttpException;
+use App\Services\HomeworkService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,19 +41,20 @@ class HomeTaskController extends AbstractController
     /**
      * @Route("/api/topic/{id}/hometask"), methods={"POST"}
      */
-    public function createAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator,Topic $topic)
+    public function createAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator,Topic $topic, HomeworkService $homeworkService)
     {
         $this->denyAccessUnlessGranted('ROLE_MENTOR');
         if (!$content = $request->getContent()) {
             throw new JsonHttpException(400, 'Bad Request');
         }
+        /** @var HomeTask $homeTask */
         $homeTask = $serializer->deserialize($content, HomeTask::class, 'json');
         $errors = $validator->validate($homeTask);
         if (count($errors)) {
             throw new JsonHttpException(400, 'Not Valid');
         }
+        $homeworkService->createHomeworkForEachStudent($topic->getPlan()->getCourse(), $homeTask);
         $em = $this->getDoctrine()->getManager();
-        /** @var HomeTask $homeTask */
         $homeTask->setTopic($topic);
         $em->persist($homeTask);
         $em->flush();
@@ -88,6 +90,7 @@ class HomeTaskController extends AbstractController
      */
     public function deleteAction(HomeTask $homeTask)
     {
+        $this->denyAccessUnlessGranted('ROLE_MENTOR');
         $em = $this->getDoctrine()->getManager();
         $em->remove($homeTask);
         $em->flush();

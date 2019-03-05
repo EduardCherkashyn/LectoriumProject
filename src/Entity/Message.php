@@ -26,6 +26,11 @@ class Message implements \JsonSerializable
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $chat;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,5 +66,17 @@ class Message implements \JsonSerializable
             'id' => $this->getId(),
             'text' => $this->getText(),
         ];
+    }
+
+    public function getChat(): ?string
+    {
+        return $this->chat;
+    }
+
+    public function setChat(string $chat): self
+    {
+        $this->chat = $chat;
+
+        return $this;
     }
 }

@@ -49,6 +49,11 @@ class CreateStudentsCammand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+        if(!$this->manager->getRepository(Student::class)->findAll() == null)
+        {
+            $io->warning("Students already uploaded!");
+            die();
+        }
         $io->section('Creating students for the season!');
         $confirm = $io->confirm('Are you sure?');
         if ($confirm) {

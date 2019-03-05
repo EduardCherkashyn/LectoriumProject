@@ -32,6 +32,12 @@ class Video
      */
     private $topic;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Mentor", inversedBy="videos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $mentor;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +75,18 @@ class Video
     public function setTopic(?Topic $topic): self
     {
         $this->topic = $topic;
+
+        return $this;
+    }
+
+    public function getMentor(): ?Mentor
+    {
+        return $this->mentor;
+    }
+
+    public function setMentor(?Mentor $mentor): self
+    {
+        $this->mentor = $mentor;
 
         return $this;
     }

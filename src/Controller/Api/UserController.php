@@ -8,6 +8,8 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Course;
+use App\Entity\Student;
 use App\Entity\UserBaseClass;
 use App\Exception\JsonHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,7 +38,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/user/password", methods={"PUT"})
+     * @Route("/api/user/password"), methods={"PUT"}
      */
     public function changePasswordAction(Request $request, ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -63,5 +65,39 @@ class UserController extends AbstractController
         $em->flush();
 
         return $this->json($user);
+    }
+
+    /**
+     * @Route("/api/user/{id}"), methods={"GET"}
+     */
+    public function getOneAction(UserBaseClass $user)
+    {
+        $this->denyAccessUnlessGranted('ROLE_MENTOR');
+
+        return $this->json($user);
+    }
+
+    /**
+     * @Route("/api/courses/{id}/student"), methods={"GET"}
+     */
+    public function getAllStudentsOfOneCourseAction(Course $course)
+    {
+        $this->denyAccessUnlessGranted('ROLE_MENTOR');
+        $students = $course->getStudents();
+
+        return $this->json($students);
+    }
+
+    /**
+     * @Route("/api/student"), methods={"DELETE"}
+     */
+    public function deleteStudentAction(Student $student)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($student);
+        $em->flush();
+
+        return $this->json('Student is deleted',200);
     }
 }

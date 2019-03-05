@@ -49,6 +49,11 @@ class CreateMentorsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+        if(!$this->manager->getRepository(Mentor::class)->findAll() == null)
+        {
+            $io->warning("Mentors already uploaded!");
+            die();
+        }
         $io->section('Creating mentors for the season!');
         $confirm = $io->confirm('Are you sure?');
         if ($confirm) {

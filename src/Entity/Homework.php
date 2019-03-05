@@ -40,15 +40,6 @@ class Homework
      */
     private $homeTask;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="homeWork")
-     */
-    private $tasks;
-
-    public function __construct()
-    {
-        $this->tasks = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -99,37 +90,6 @@ class Homework
     public function setHomeTask(?HomeTask $homeTask): self
     {
         $this->homeTask = $homeTask;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Task[]
-     */
-    public function getTasks(): Collection
-    {
-        return $this->tasks;
-    }
-
-    public function addTask(Task $task): self
-    {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks[] = $task;
-            $task->setHomeWork($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTask(Task $task): self
-    {
-        if ($this->tasks->contains($task)) {
-            $this->tasks->removeElement($task);
-            // set the owning side to null (unless already changed)
-            if ($task->getHomeWork() === $this) {
-                $task->setHomeWork(null);
-            }
-        }
 
         return $this;
     }

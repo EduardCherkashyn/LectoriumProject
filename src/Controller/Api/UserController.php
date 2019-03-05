@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/login"), methods={"POST"}
+     * @Route("/login", methods={"POST"})
      */
     public function loginAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -38,7 +38,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/user/password"), methods={"PUT"}
+     * @Route("/api/user/password", methods={"PUT"})
      */
     public function changePasswordAction(Request $request, ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -68,7 +68,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/user/{id}"), methods={"GET"}
+     * @Route("/api/user/{id}", methods={"GET"})
      */
     public function getOneAction(UserBaseClass $user)
     {
@@ -78,7 +78,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/courses/{id}/student"), methods={"GET"}
+     * @Route("/api/courses/{id}/student", methods={"GET"})
      */
     public function getAllStudentsOfOneCourseAction(Course $course)
     {
@@ -89,7 +89,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/student"), methods={"DELETE"}
+     * @Route("/api/student", methods={"DELETE"})
      */
     public function deleteStudentAction(Student $student)
     {

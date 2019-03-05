@@ -47,7 +47,8 @@ class CreateCoursesWithPlansCommand extends Command
         if(!$this->manager->getRepository(Course::class)->findAll() == null)
         {
           $io->warning("Courses already uploaded!");
-          die();
+
+          return;
         }
         $file = file_get_contents(getcwd().'/public/Courses/Courses.txt');
         $data = explode("\n", $file);

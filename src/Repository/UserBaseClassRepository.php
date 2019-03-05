@@ -19,15 +19,6 @@ class UserBaseClassRepository extends ServiceEntityRepository
         parent::__construct($registry, UserBaseClass::class);
     }
 
-    public function findByRole($role)
-    {
-        return $this->createQueryBuilder('u')
-            ->where('u.roles LIKE :roles')
-            ->setParameter('roles', '%"'.$role.'"%')
-            ->getQuery()
-            ->getResult()
-            ;
-    }
     // /**
     //  * @return UserBaseClass[] Returns an array of UserBaseClass objects
     //  */

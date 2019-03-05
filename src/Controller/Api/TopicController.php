@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class TopicController extends AbstractController
 {
     /**
-     * @Route("/api/topic/{id}"), methods={"GET"}
+     * @Route("/api/topic/{id}", methods={"GET"})
      */
     public function getOneAction(Topic $topic)
     {
@@ -28,7 +28,7 @@ class TopicController extends AbstractController
     }
 
     /**
-     * @Route("/api/topic"), methods={"GET"}
+     * @Route("/api/topic", methods={"GET"})
      */
     public function getAllAction()
     {
@@ -41,7 +41,7 @@ class TopicController extends AbstractController
     }
 
     /**
-     * @Route("/api/topic"), methods={"POST"}
+     * @Route("/api/topic", methods={"POST"})
      */
     public function createAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
@@ -68,7 +68,7 @@ class TopicController extends AbstractController
     }
 
     /**
-     * @Route("/api/topic/{id}"), methods={"PUT"}
+     * @Route("/api/topic/{id}", methods={"PUT"})
      */
     public function editAction(Request $request, ValidatorInterface $validator, Topic $topic)
     {
@@ -92,7 +92,7 @@ class TopicController extends AbstractController
     }
 
     /**
-     * @Route("/api/topic/{id}"), methods={"DELETE"}
+     * @Route("/api/topic/{id}", methods={"DELETE"})
      */
     public function deleteAction(Topic $topic)
     {

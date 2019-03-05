@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class HomeWorkController extends AbstractController
 {
     /**
-     * @Route("/api/hometask/{id}"), methods={"GET"}
+     * @Route("/api/hometask/{id}", methods={"GET"})
      */
     public function getOneAction(Homework $homework)
     {
@@ -28,7 +28,7 @@ class HomeWorkController extends AbstractController
     }
 
     /**
-     * @Route("/api/student/{id}/homework"), methods={"GET"}
+     * @Route("/api/student/{id}/homework", methods={"GET"})
      */
     public function getAllOfOneStudentAction(Student $student)
     {
@@ -38,7 +38,7 @@ class HomeWorkController extends AbstractController
     }
 
     /**
-     * @Route("/api/homework/{id}"), methods={"PUT"}
+     * @Route("/api/homework/{id}", methods={"PUT"})
      */
     public function editAction(Request $request, Homework $homework, ValidatorInterface $validator)
     {
@@ -64,7 +64,7 @@ class HomeWorkController extends AbstractController
     }
 
     /**
-     * @Route("/api/homework-check/{id}"), methods={"PUT"}
+     * @Route("/api/homework-check/{id}", methods={"PUT"})
      */
     public function checkAction(Request $request, Homework $homework, ValidatorInterface $validator)
     {

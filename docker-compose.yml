@@ -12,9 +12,6 @@ services:
         - .:/application
       environment:
          - MYSQL_ROOT_PASSWORD=dbrootpw
-         - MYSQL_DATABASE=database_%kernel.environment%
-         - MYSQL_USER=dbuser
-         - MYSQL_PASSWORD=dbpw
       ports:
         - "8002:3306"
     webserver:

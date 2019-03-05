@@ -8,6 +8,8 @@
 
 namespace App\Tests;
 
+use App\Entity\Mentor;
+use App\Entity\Student;
 use App\Entity\UserBaseClass;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -29,10 +31,11 @@ class AbstractTest extends WebTestCase
         $this->client = static::createClient();
         $this->client->disableReboot();
         $this->entityManager = $this->client->getContainer()->get('doctrine.orm.entity_manager');
-        /** @var @var UserBaseClass $student */
-        $student = $this->entityManager->getRepository(UserBaseClass::class)->findOneBy(['email'=>'student@ukr.net']);
+        /** @var UserBaseClass $student */
+        $student = $this->entityManager->getRepository(Student::class)->findOneBy([]);
         $this->token_student = $student->getApiToken();
-        $mentor =$this->entityManager->getRepository(UserBaseClass::class)->findOneBy(['email'=>'edik@ukr.net']);
+        /** @var UserBaseClass $mentor */
+        $mentor =$this->entityManager->getRepository(Mentor::class)->findOneBy([]);
         $this->token_mentor = $mentor->getApiToken();
 
         parent::__construct($name, $data, $dataName);

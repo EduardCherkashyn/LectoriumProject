@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class VideoController extends AbstractController
 {
     /**
-     * @Route("/api/video/{id}"), methods={"GET"}
+     * @Route("/api/video/{id}", methods={"GET"})
      */
     public function getOneAction(Video $video)
     {
@@ -29,7 +29,7 @@ class VideoController extends AbstractController
     }
 
     /**
-     * @Route("/api/topic/{id}/video"), methods={"GET"}
+     * @Route("/api/video/topic/{id}", methods={"GET"})
      */
     public function getAllOfOneTopicAction(Topic $topic)
     {
@@ -39,7 +39,7 @@ class VideoController extends AbstractController
     }
 
     /**
-     * @Route("/api/topic/{id}/video"), methods={"POST"}
+     * @Route("/api/video/topic/{id}", methods={"POST"})
      */
     public function createAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, Topic $topic)
     {
@@ -62,7 +62,7 @@ class VideoController extends AbstractController
     }
 
     /**
-     * @Route("/api/video/{id}"), methods={"PUT"}
+     * @Route("/api/video/{id}", methods={"PUT"})
      */
     public function editAction(Request $request, Video $video, ValidatorInterface $validator)
     {
@@ -86,7 +86,7 @@ class VideoController extends AbstractController
 
 
     /**
-     * @Route("/api/video/{id}"), methods={"DELETE"}
+     * @Route("/api/video/{id}", methods={"DELETE"})
      */
     public function deleteAction(Video $video)
     {

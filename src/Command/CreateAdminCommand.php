@@ -9,7 +9,6 @@
 namespace App\Command;
 
 use App\Entity\Admin;
-use App\Entity\UserBaseClass;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,11 +50,12 @@ class CreateAdminCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $admin = $this->manager->getRepository(UserBaseClass::class)->findByRole("ROLE_ADMIN");
+        $admin = $this->manager->getRepository(Admin::class)->findOneBy([]);
         if(!$admin == null)
         {
             $io->warning("Admin already exist!");
-            die();
+
+            return;
         }
 
         $io->section('Creating admin user!');

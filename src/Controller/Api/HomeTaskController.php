@@ -29,7 +29,7 @@ class HomeTaskController extends AbstractController
     }
 
     /**
-     * @Route("/api/topic/{id}/hometask"), methods={"GET"}
+     * @Route("/api/hometask/topic/{id}"), methods={"GET"}
      */
     public function getAllOfOneTopicAction(Topic $topic)
     {
@@ -39,7 +39,7 @@ class HomeTaskController extends AbstractController
     }
 
     /**
-     * @Route("/api/topic/{id}/hometask"), methods={"POST"}
+     * @Route("/api/hometask/topic/{id}"), methods={"POST"}
      */
     public function createAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator,Topic $topic, HomeworkService $homeworkService)
     {

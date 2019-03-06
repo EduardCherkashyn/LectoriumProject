@@ -18,13 +18,6 @@ use Doctrine\ORM\Mapping\Entity;
 class Mentor extends UserBaseClass implements \JsonSerializable
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Course", inversedBy="mentors")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -40,11 +33,6 @@ class Mentor extends UserBaseClass implements \JsonSerializable
     {
         $this->messages = new ArrayCollection();
         $this->videos = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getCourse(): ?Course

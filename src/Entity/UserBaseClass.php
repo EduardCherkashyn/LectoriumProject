@@ -27,7 +27,7 @@ abstract class UserBaseClass implements UserInterface, \JsonSerializable
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
     /**
      * @var string
      * @Assert\Email()

@@ -14,16 +14,4 @@ use Doctrine\ORM\Mapping\Entity;
 /** @Entity */
 class Admin extends UserBaseClass
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 }

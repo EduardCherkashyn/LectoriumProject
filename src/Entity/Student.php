@@ -16,12 +16,6 @@ use Doctrine\ORM\Mapping\Entity;
 /** @Entity */
 class Student extends UserBaseClass
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Course", inversedBy="students")
@@ -39,10 +33,6 @@ class Student extends UserBaseClass
         $this->homeworks = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getCourse(): ?Course
     {

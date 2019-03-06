@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping\Entity;
 /** @Entity */
 class Student extends UserBaseClass
 {
-
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Course", inversedBy="students")
      * @ORM\JoinColumn(nullable=true)

@@ -8,23 +8,18 @@
 
 namespace App\Tests\Controller\Api;
 
+use App\Entity\Admin;
+use App\Entity\Course;
 use App\Entity\Student;
 use App\Tests\AbstractTest;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Client;
 
 class UserControllerTest extends AbstractTest
 {
-    /** @var Client $client */
-    protected $client;
-    /** @var EntityManagerInterface */
-    protected $entityManager;
-
     /**
      * @test
      * @dataProvider userData
      */
-    public function testLoginAction($password, $email, $expected): void
+    public function testLogin($password, $email, $expected): void
     {
         $data = [
             'password'=> $password,
@@ -43,8 +38,11 @@ class UserControllerTest extends AbstractTest
 
     public function userData()
     {
+        /** @var Student $student */
+        $student = $this->entityManager->getRepository(Student::class)->findOneBy([]);
+
         return [
-            'Valid data' => ['Eduard', 'student@ukr.net', 200],
+            'Valid data' => [$student->getName(), $student->getEmail(), 200],
             'Invalid Data' => ['1111', 'ed@ukr.net', 404],
             'Empty Data' => ['', '', 404]
         ];
@@ -54,7 +52,7 @@ class UserControllerTest extends AbstractTest
      * @test
      * @dataProvider passwordData
      */
-    public function testPasswordChangeAction($passwordOld, $passwordNew, $token, $expected): void
+    public function testPasswordChange($passwordOld, $passwordNew, $token, $expected): void
     {
         $data = [
             'oldPassword'=> $passwordOld,
@@ -75,11 +73,14 @@ class UserControllerTest extends AbstractTest
 
     public function passwordData()
     {
+        /** @var Student $student */
+        $student = $this->entityManager->getRepository(Student::class)->findOneBy([]);
+
         return [
-            'Valid data' => ['Eduard', 'Eduard',$this->token_student, 200],
-            'Invalid data' => ['Eduard', '11',$this->token_student, 400],
+            'Valid data' => ['Eduard', 'Eduard',$student->getApiToken(), 200],
+            'Invalid data' => ['Eduard', '11',$student->getApiToken(), 400],
             'UnAuthorized' => ['111', '111111','', 403],
-            'Invalid Old password' => ['12', '111111',$this->token_student, 400]
+            'Invalid Old password' => ['12', '111111',$student->getApiToken(), 400]
         ];
     }
 
@@ -87,7 +88,7 @@ class UserControllerTest extends AbstractTest
      * @test
      * @dataProvider getoneData
      */
-    public function testgetOneAction($id, $token, $expected): void
+    public function testGetOne($id, $token, $expected): void
     {
 
         $this->client->request(
@@ -113,4 +114,70 @@ class UserControllerTest extends AbstractTest
             'UnAuthorized' => [$student->getId(), $this->token_student, 403],
         ];
     }
+
+    /**
+     * @test
+     * @dataProvider getAllByCourseData
+     */
+    public function testGetAllStudentsOfOneCourse($id, $token, $expected): void
+    {
+
+        $this->client->request(
+            'GET',
+            '/api/courses/'.$id.'/student',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json',
+                'HTTP_X-AUTH-TOKEN' => $token
+            ]
+        );
+        $this->assertEquals($expected, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function getAllByCourseData()
+    {
+        /** @var Course $course */
+        $course = $this->entityManager->getRepository(Course::class)->findOneBy([]);
+
+        return [
+            'Valid data' => [$course->getId(), $this->token_mentor, 200],
+            'Invalid data' => [111111111, $this->token_mentor, 404],
+            'UnAuthorized' => [$course->getId(), $this->token_student, 403],
+        ];
+    }
+
+
+    /**
+     * @test
+     * @dataProvider deleteStudentData
+     */
+    public function testDeleteStudent($id, $token, $expected): void
+    {
+
+        $this->client->request(
+            'DELETE',
+            '/api/student/'.$id,
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json',
+                'HTTP_X-AUTH-TOKEN' => $token
+            ]
+        );
+        $this->assertEquals($expected, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function deleteStudentData()
+    {
+        /** @var Student $student */
+        $student = $this->entityManager->getRepository(Student::class)->findOneBy([]);
+        /** @var Admin $admin */
+        $admin = $this->entityManager->getRepository(Admin::class)->findOneBy([]);
+
+        return [
+            'Invalid data' => [111111111, $admin->getApiToken(), 404],
+            'UnAuthorized' => [$student->getId(), $this->token_mentor, 403],
+            'Valid data' => [$student->getId(), $admin->getApiToken(), 200]
+        ];
+    }
+
 }

@@ -89,7 +89,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/student", methods={"DELETE"})
+     * @Route("/api/student/{id}", methods={"DELETE"})
      */
     public function deleteStudentAction(Student $student)
     {

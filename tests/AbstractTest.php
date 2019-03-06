@@ -28,7 +28,7 @@ class AbstractTest extends WebTestCase
 
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
-        $this->client = static::createClient();
+        $this->client = static::createClient(['environment' => 'test']);
         $this->client->disableReboot();
         $this->entityManager = $this->client->getContainer()->get('doctrine.orm.entity_manager');
         /** @var UserBaseClass $student */

@@ -10,22 +10,12 @@ namespace App\Tests\src\Command;
 
 use App\Entity\Course;
 use App\Entity\Plan;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Tests\AbstractTest;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CreateCoursesWithPlansCommandTest extends KernelTestCase
+class CreateCoursesWithPlansCommandTest extends AbstractTest
 {
-    /** @var EntityManagerInterface */
-    protected $entityManager;
-
-    public function setUp()
-    {
-        $kernel = self::bootKernel();
-        $this->entityManager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-    }
-
     public function testExecute()
     {
         $kernel = static::createKernel();

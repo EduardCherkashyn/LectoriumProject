@@ -8,6 +8,7 @@ Project is up at port :8000
 Inside container exec:
 
 ```
+php bin/console d:d:c
 php bin/console d:m:m
 ````
 
@@ -16,7 +17,7 @@ To start a new season put all the courses to the
 ```` 
  /public/Courses/Courses.txt
  ````
- start new course with a new line.
+ start each course with a new line.
  
  Example:
  

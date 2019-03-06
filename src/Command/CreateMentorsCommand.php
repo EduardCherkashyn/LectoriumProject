@@ -49,11 +49,9 @@ class CreateMentorsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        if(!$this->manager->getRepository(Mentor::class)->findAll() == null)
-        {
+        if(!$this->manager->getRepository(Mentor::class)->findAll() == null) {
             $io->warning("Mentors already uploaded!");
-            die();
-        }
+        }else{
         $io->section('Creating mentors for the season!');
         $confirm = $io->confirm('Are you sure?');
         if ($confirm) {
@@ -85,6 +83,7 @@ class CreateMentorsCommand extends Command
 
             $this->manager->flush();
             $io->success("Success!");
+            }
         }
     }
 }

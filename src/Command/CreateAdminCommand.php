@@ -51,15 +51,10 @@ class CreateAdminCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $admin = $this->manager->getRepository(Admin::class)->findOneBy([]);
-        if(!$admin == null)
-        {
+        if(!$admin == null) {
             $io->warning("Admin already exist!");
-
-            return;
-        }
-
+        }else{
         $io->section('Creating admin user!');
-
         $confirm = $io->confirm('Are you sure?');
         if ($confirm) {
             $question = new Question('Please enter your email:');
@@ -78,6 +73,7 @@ class CreateAdminCommand extends Command
             $this->manager->persist($admin);
             $this->manager->flush();
             $io->success("Success!");
+            }
         }
     }
 }

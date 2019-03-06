@@ -44,12 +44,9 @@ class CreateCoursesWithPlansCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        if(!$this->manager->getRepository(Course::class)->findAll() == null)
-        {
+        if(!$this->manager->getRepository(Course::class)->findAll() == null) {
           $io->warning("Courses already uploaded!");
-
-          return;
-        }
+        }else{
         $file = file_get_contents(getcwd().'/public/Courses/Courses.txt');
         $data = explode("\n", $file);
         $io->section('Creating courses for the season!');
@@ -65,6 +62,7 @@ class CreateCoursesWithPlansCommand extends Command
             }
             $this->manager->flush();
             $io->success("Success!");
+            }
         }
     }
 }

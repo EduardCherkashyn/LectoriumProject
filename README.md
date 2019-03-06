@@ -1,3 +1,8 @@
+
+````
+composer install
+````
+Docker
 ```
 docker-compose up -d
 

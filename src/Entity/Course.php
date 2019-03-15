@@ -50,6 +50,8 @@ class Course
     {
         $this->mentors = new ArrayCollection();
         $this->students = new ArrayCollection();
+        $this->year = new \DateTime();
+        $this->setPlan(new Plan());
     }
 
     public function getId(): ?int

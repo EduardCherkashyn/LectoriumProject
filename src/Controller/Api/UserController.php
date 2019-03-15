@@ -12,14 +12,45 @@ use App\Entity\Course;
 use App\Entity\Student;
 use App\Entity\UserBaseClass;
 use App\Exception\JsonHttpException;
+use App\Services\AvatarService;
+use App\Services\FilterCoursesForUserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 class UserController extends AbstractController
 {
+    /**
+     * @Route("/api/student", methods={"POST"})
+     */
+    public function userCreateAction(Request $request,
+                                     SerializerInterface $serializer,
+                                     ValidatorInterface $validator,
+                                     FilterCoursesForUserService $courseService)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$content = $request->getContent()) {
+            throw new JsonHttpException(400, 'Bad Request');
+        }
+        /** @var Student $student */
+        $student = $serializer->deserialize($content, Student::class, 'json');
+        $course = $courseService->filter($student);
+        $student->setCourse($course);
+        $errors = $validator->validate($student);
+        if (count($errors)) {
+            throw new JsonHttpException(400, 'Not Valid');
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($student);
+        $em->flush();
+
+        return $this->json($student);
+    }
+
     /**
      * @Route("/login", methods={"POST"})
      */
@@ -40,7 +71,9 @@ class UserController extends AbstractController
     /**
      * @Route("/api/user/password", methods={"PUT"})
      */
-    public function changePasswordAction(Request $request, ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder)
+    public function changePasswordAction(Request $request,
+                                         ValidatorInterface $validator,
+                                         UserPasswordEncoderInterface $passwordEncoder)
     {
         if (!$content = $request->getContent()) {
             throw new JsonHttpException(400, 'Bad Request');
@@ -99,5 +132,38 @@ class UserController extends AbstractController
         $em->flush();
 
         return $this->json('Student is deleted',200);
+    }
+
+    /**
+     * @Route("/api/avatar", methods={"POST"})
+     */
+    public function avatarUploadAction(Request $request, AvatarService $avatarService)
+    {
+        if (!$content = $request->getContent()) {
+            throw new JsonHttpException(400, 'Bad Request');
+        }
+        /** @var UserBaseClass $user */
+        $user = $this->getUser();
+        $avatarService->upload($user, $content);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        return $this->json($user);
+    }
+
+    /**
+     * @Route("/api/avatar", methods={"DELETE"})
+     */
+    public function avatarDeleteAction()
+    {
+        /** @var UserBaseClass $user */
+        $user = $this->getUser();
+        $user->setAvatar('default.jpeg');
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        return $this->json($user);
     }
 }

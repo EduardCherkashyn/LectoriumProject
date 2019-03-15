@@ -14,8 +14,13 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="Lectorium">
+            <file>tests/src/Command/CreateCoursesWithPlansCommandTest.php</file>
+            <file>tests/src/Command/CreateAdminCommandTest.php</file>
+            <file>tests/src/Command/CreateMentorsCommandTest.php</file>
+            <file>tests/src/Command/CreateStudentsCommandTest.php</file>
+            <file>tests/src/Controller/Api/TopicControllerTest.php</file>
+            <file>tests/src/Controller/Api/UserControllerTest.php</file>
         </testsuite>
     </testsuites>
 

@@ -10,6 +10,7 @@ namespace App\Command;
 
 use App\Entity\Course;
 use App\Entity\Mentor;
+use App\Services\FilterCoursesForUserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
@@ -17,6 +18,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class CreateMentorsCommand extends Command
 {
@@ -26,11 +31,19 @@ class CreateMentorsCommand extends Command
 
     protected $encoder;
 
+    protected $serializer;
 
-    public function __construct($name = null, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+    protected $courseService;
+
+    public function __construct($name = null, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder, FilterCoursesForUserService $coursesForUserService)
     {
+        $this->courseService = $coursesForUserService;
         $this->manager = $manager;
         $this->encoder = $encoder;
+        $this->serializer = new Serializer(
+            [new GetSetMethodNormalizer(), new ArrayDenormalizer()],
+            [new CsvEncoder()]
+        );;
         parent::__construct($name);
     }
 
@@ -51,38 +64,27 @@ class CreateMentorsCommand extends Command
         $io = new SymfonyStyle($input, $output);
         if(!$this->manager->getRepository(Mentor::class)->findAll() == null) {
             $io->warning("Mentors already uploaded!");
-        }else{
+        }
+        else{
         $io->section('Creating mentors for the season!');
         $confirm = $io->confirm('Are you sure?');
         if ($confirm) {
-            $file = file_get_contents(getcwd().'/public/Mentors/Mentors.txt');
-            $data = explode("\n", $file);
-            $mentors = [];
-            foreach ($data as $value) {
-                $mentor = explode(':', $value);
-                $mentors[] = $mentor;
-            }
-            $courses = $this->manager->getRepository(Course::class)->findAll();
-            foreach ($courses as $course) {
-                $name = $course->getName();
-                foreach ($mentors as $value) {
-                    if ($name == $value[3]) {
-                        $uuid = Uuid::uuid4();
-                        $mentor = new Mentor();
-                        $mentor->setEmail($value[0])
-                            ->setPassword($this->encoder->encodePassword($mentor, $value[1]))
-                            ->setName($value[2])
-                            ->setCourse($course)
-                            ->setRoles(["ROLE_MENTOR"])
-                            ->setApiToken($uuid->toString());
-                        $this->manager->persist($mentor);
-                        unset($value);
-                    }
+            $files = file_get_contents(getcwd().'/public/Mentors/Mentors.csv');
+            $data = $this->serializer->deserialize($files,Mentor::class.'[]','csv');
+                /** @var Mentor $mentor */
+            foreach ($data as $mentor) {
+                $course = $this->courseService->filter($mentor);
+                $uuid = Uuid::uuid4();
+                $mentor->setPassword($this->encoder->encodePassword($mentor, $mentor->getPassword()))
+                       ->setRoles(["ROLE_MENTOR"])
+                       ->setApiToken($uuid->toString())
+                       ->setAvatar('default.jpeg')
+                       ->setCourse($course);
+                $this->manager->persist($mentor);
                 }
-            }
+                $this->manager->flush();
+                $io->success("Success!");
 
-            $this->manager->flush();
-            $io->success("Success!");
             }
         }
     }

@@ -69,7 +69,8 @@ class CreateAdminCommand extends Command
                 ->setEmail($email)
                 ->setRoles(['ROLE_ADMIN'])
                 ->setPassword($this->encoder->encodePassword($admin, $password))
-                ->setApiToken($uuid->toString($uuid));
+                ->setApiToken($uuid->toString($uuid))
+                ->setAvatar('default.jpeg');
             $this->manager->persist($admin);
             $this->manager->flush();
             $io->success("Success!");

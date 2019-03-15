@@ -41,7 +41,11 @@ class HomeTaskController extends AbstractController
     /**
      * @Route("/api/hometask/topic/{id}"), methods={"POST"}
      */
-    public function createAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator,Topic $topic, HomeworkService $homeworkService)
+    public function createAction(Request $request,
+                                 SerializerInterface $serializer,
+                                 ValidatorInterface $validator,
+                                 Topic $topic,
+                                 HomeworkService $homeworkService)
     {
         $this->denyAccessUnlessGranted('ROLE_MENTOR');
         if (!$content = $request->getContent()) {

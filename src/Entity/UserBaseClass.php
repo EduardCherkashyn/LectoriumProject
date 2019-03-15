@@ -70,6 +70,24 @@ abstract class UserBaseClass implements UserInterface, \JsonSerializable
      */
     protected $messages;
 
+    protected $plainCourse;
+
+    /**
+     * @return mixed
+     */
+    public function getPlainCourse()
+    {
+        return $this->plainCourse;
+    }
+
+    /**
+     * @param mixed $plainCourse
+     */
+    public function setPlainCourse($plainCourse): void
+    {
+        $this->plainCourse = $plainCourse;
+    }
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();

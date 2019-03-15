@@ -2,19 +2,22 @@
 /**
  * Created by PhpStorm.
  * User: eduardcherkashyn
- * Date: 2019-02-26
- * Time: 13:07
+ * Date: 2019-03-07
+ * Time: 10:59
  */
 
 namespace App\Command;
 
 use App\Entity\Course;
-use App\Entity\Plan;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class CreateCoursesWithPlansCommand extends Command
 {
@@ -22,10 +25,15 @@ class CreateCoursesWithPlansCommand extends Command
 
     protected $manager;
 
+    protected $serializer;
 
     public function __construct($name = null, EntityManagerInterface $manager)
     {
         $this->manager = $manager;
+        $this->serializer = new Serializer(
+            [new GetSetMethodNormalizer(), new ArrayDenormalizer()],
+            [new CsvEncoder()]
+        );;
         parent::__construct($name);
     }
 
@@ -45,24 +53,20 @@ class CreateCoursesWithPlansCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         if(!$this->manager->getRepository(Course::class)->findAll() == null) {
-          $io->warning("Courses already uploaded!");
+            $io->warning("Courses already uploaded!");
         }else{
-        $file = file_get_contents(getcwd().'/public/Courses/Courses.txt');
-        $data = explode("\n", $file);
-        $io->section('Creating courses for the season!');
-        $confirm = $io->confirm('Are you sure?');
-        if ($confirm) {
-            foreach ($data as $value) {
-                $course = new Course();
-                $plan = new Plan();
-                $course->setName($value);
-                $course->setYear(new \DateTime())
-                       ->setPlan($plan);
-                $this->manager->persist($course);
-            }
-            $this->manager->flush();
-            $io->success("Success!");
+            $files = file_get_contents(getcwd().'/public/Courses/Courses.csv');
+            $io->section('Creating courses for the season!');
+            $confirm = $io->confirm('Are you sure?');
+            if ($confirm) {
+                $data = $this->serializer->deserialize($files,Course::class.'[]','csv');
+                foreach ($data as $course) {
+                    $this->manager->persist($course);
+                }
+                $this->manager->flush();
+                $io->success("Success!");
             }
         }
     }
+
 }

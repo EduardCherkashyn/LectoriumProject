@@ -11,22 +11,25 @@ namespace App\Tests\src\Command;
 
 use App\Entity\Student;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CreateStudentsCommandTest extends WebTestCase
+class CreateStudentsCommandTest extends KernelTestCase
 {
     /** @var EntityManagerInterface */
     protected $entityManager;
 
-
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp()
     {
-        $client = static::createClient(['environment' => 'test']);
-        $this->entityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
+        $kernel = self::bootKernel();
 
-        parent::__construct($name, $data, $dataName);
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
     }
 
     public function testExecute()
@@ -46,5 +49,16 @@ class CreateStudentsCommandTest extends WebTestCase
         $student = $this->entityManager->getRepository(Student::class)->findOneBy(['email' => 'student@ukr.net']);
         $this->assertNotEmpty($student,'No records found!');
         $this->assertContains("ROLE_STUDENT",$student->getRoles());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->entityManager->close();
+        $this->entityManager = null; // avoid memory leaks
     }
 }
